@@ -72,7 +72,7 @@ function setup() {
 
     let capture = createCapture(VIDEO);
     createCanvas(windowWidth, windowHeight);
-    capture.size(windowHeight, windowHeight);
+    capture.size(windowWidth, windowHeight);
     capture.hide();
 
     tracker = new clm.tracker();
