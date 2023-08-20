@@ -1,0 +1,25 @@
+{
+  "name": "comparts-final",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyanan09/comparts-final-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lyanan09/comparts-final-js/issues"
+  },
+  "homepage": "https://github.com/lyanan09/comparts-final-js#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
