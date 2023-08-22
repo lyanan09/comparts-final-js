@@ -21,7 +21,7 @@ let printEveryMessage = false;
 io.on("connection", (socket) => {
 
     
-    console.log(socket.id + "connected");
+    console.log(socket.id + " connected");
 
     // Code to run every time we get a message from front-end P5.JS
     socket.on("drawing", (data) => {
