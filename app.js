@@ -24,10 +24,21 @@ io.on("connection", (socket) => {
     console.log(socket.id + " connected");
 
     // Code to run every time we get a message from front-end P5.JS
-    socket.on("drawing", (data) => {
+    socket.on("is_1_looking", (data) => {
 
         //do something
-        socket.broadcast.emit('drawing', data);//broadcast.emit means send to everyone but the sender
+        socket.broadcast.emit('is_1_looking', data);//broadcast.emit means send to everyone but the sender
+
+        // Print it to the Console
+        if (printEveryMessage) {
+            console.log(data);
+        }
+    });
+
+    socket.on("is_2_looking", (data) => {
+
+        //do something
+        socket.broadcast.emit('is_2_looking', data);//broadcast.emit means send to everyone but the sender
 
         // Print it to the Console
         if (printEveryMessage) {
@@ -35,4 +46,5 @@ io.on("connection", (socket) => {
         }
     });
 });
+
 

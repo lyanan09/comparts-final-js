@@ -19,8 +19,12 @@ let tracker;
 let positions;
 let w = 0, h = 0;
 
+let debug = true;
+let isLooking = false;
+
 // chrome
 const webcamId = "d4d49ce95bdb6a064c8d9e68bb747e2f7997eb7fa1c4957dbf14b87a7b447038";
+// const webcamId = "62b99945ee378fc03ebc3d05d4bbaeaa3be9f4cac22c77c20044e57d62416553";
 
 
 function preload() {
@@ -63,9 +67,22 @@ function draw() {
     //image(capture, 0, 0, w, h);
     positions = tracker.getCurrentPosition();
 
-    console.log(positions)
+    // console.log(positions)
 
-    if (positions.length > 0) {
+    if (positions) {
+        socket.emit("is_2_looking", {
+            isLooking: true
+        });
+    } else {
+        socket.emit("is_2_looking", {
+            isLooking: false
+        });
+    }
+
+
+
+    // for debuging
+    if (positions && debug) {
 
         // Eye points from clmtrackr:
         // https://www.auduno.com/clmtrackr/docs/reference.html
@@ -90,12 +107,16 @@ function draw() {
 
 // When a key is pressed, capture the background image into the backgroundPixels
 // buffer, by copying each of the current frame's pixels into it.
-function keyPressed() {
-    noLoop();
+function keyPressed({ key }) {
+    if (key == 'd')
+        debug = !debug;
+    else if (key == ' ')
+        noLoop();
 }
 
 // This method can be removed after the source ID has been determined.
 function gotSources(sources) {
+
     for (var i = 0; i !== sources.length; ++i) {
         if (sources[i].kind === 'video' || sources[i].kind === 'videoinput') {
             console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
@@ -150,16 +171,16 @@ function windowResized() {
 
 // Connect to Node.JS Server
 socket.on("connect", () => {
-    console.log("window-1-socket connect:" + socket.id);
+    console.log("window-2-socket connect:" + socket.id);
 });
 
 // Callback function on the event we disconnect
 socket.on("disconnect", () => {
-    console.log("window-1-socket disconnect:" + socket.id);
+    console.log("window-2-socket disconnect:" + socket.id);
 });
 
 // Callback function to recieve message from Node.JS
-socket.on("drawing", (data) => {
-    console.log(data);
-
+socket.on("is_1_looking", (data) => {
+    console.log("window-1-socket looking status:" + data.isLooking);
+    isLooking = data.isLooking;
 });
