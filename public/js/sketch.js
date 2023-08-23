@@ -24,7 +24,7 @@ let isLooking = false;
 
 // chrome
 // const webcamId = "d4d49ce95bdb6a064c8d9e68bb747e2f7997eb7fa1c4957dbf14b87a7b447038";
-const webcamId = "62b99945ee378fc03ebc3d05d4bbaeaa3be9f4cac22c77c20044e57d62416553";
+const webcamId = "785baabd4cbc98a38a9f0ee0474029659d08b5105daf24a9c7842f8de776ab65";
 
 
 function preload() {
@@ -111,6 +111,10 @@ function keyPressed({ key }) {
         debug = !debug;
     else if (key == ' ')
         noLoop();
+    else if (key == 'f') {
+        let fs = fullscreen();
+        fullscreen(!fs);
+    }
 }
 
 // This method can be removed after the source ID has been determined.
