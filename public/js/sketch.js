@@ -1,14 +1,5 @@
-/**
- * Based on Processing Video Background Subtraction example
- * by Golan Levin.
- *
- * Detect the presence of people and objects in the frame using a simple
- * background-subtraction technique. To initialize the background, press a key.
- */
-
 // Create connection to Node.JS Server
 const socket = io();
-
 
 const captureWidrh = 320;
 const captureHeight = 240;
@@ -19,12 +10,34 @@ let tracker;
 let positions;
 let w = 0, h = 0;
 
-let debug = true;
-let isLooking = false;
+let isDebugging = true;
+let isLooking = false; //current looking status
+let isLookingPrev = false; //previous looking status
 
 // chrome
 // const webcamId = "d4d49ce95bdb6a064c8d9e68bb747e2f7997eb7fa1c4957dbf14b87a7b447038";
-const webcamId = "785baabd4cbc98a38a9f0ee0474029659d08b5105daf24a9c7842f8de776ab65";
+const webcamId = "4a9871ca9f4961e0a35cbda0217497cfe5c31a160aedea44d89969ffb1bd05cc";
+
+let curWordIndex = 0;
+const words = [
+    "A dreaded sunny day",
+    "So I meet you at the cemetry gates",
+    "Keats and Yeats are on your side",
+    "While Wilde is on mine",
+    "So we go inside and we gravely read the stones",
+    "All those people, all those lives",
+    "Where are they now?",
+    "With loves, and hates",
+    "And passions just like mine",
+    "They were born",
+    "And then they lived",
+    "And then they died",
+    "It seems so unfair",
+    "I want to cry",
+    "You say : 'Ere thrice the sun done salutation to the dawn'",
+    "And you claim these words as your own",
+    "But I've read well, and I've heard them said",
+]
 
 
 function preload() {
@@ -46,13 +59,14 @@ function setup() {
     };
 
     capture = createCapture(constraints);
+    // capture = createCapture(VIDEO);
     createCanvas(w, h);
     capture.size(w, h);
     capture.hide();
 
     frameRate(10);
     colorMode(HSB);
-    background(0);
+    background(255);
 
     tracker = new clm.tracker();
     tracker.init();
@@ -69,6 +83,10 @@ function draw() {
 
     // console.log(positions)
 
+    // console.log("isLookingPrev:" + isLookingPrev)
+    // console.log("isLooking:" + isLooking)
+
+
     if (positions) {
         socket.emit("is_1_looking", {
             isLooking: true
@@ -81,7 +99,7 @@ function draw() {
 
 
     // for debuging
-    if (positions && debug) {
+    if (positions && isDebugging) {
 
         // Eye points from clmtrackr:
         // https://www.auduno.com/clmtrackr/docs/reference.html
@@ -107,8 +125,10 @@ function draw() {
 // When a key is pressed, capture the background image into the backgroundPixels
 // buffer, by copying each of the current frame's pixels into it.
 function keyPressed({ key }) {
-    if (key == 'd')
-        debug = !debug;
+    if (key == 'd') {
+        isDebugging = !isDebugging;
+        clear();
+    }
     else if (key == ' ')
         noLoop();
     else if (key == 'f') {
@@ -134,7 +154,7 @@ function getPoint(index) {
 function drawEye(eye, irisColor) {
     noFill();
     stroke(255, 0.4);
-    drawEyeOutline(eye);
+    // drawEyeOutline(eye);
 
     const irisRadius = min(eye.center.dist(eye.top), eye.center.dist(eye.bottom));
     const irisSize = irisRadius * 2;
@@ -147,27 +167,9 @@ function drawEye(eye, irisColor) {
     ellipse(eye.center.x, eye.center.y, pupilSize, pupilSize);
 }
 
-function drawEyeOutline(eye) {
-    beginShape();
-    const firstPoint = eye.outline[0];
-    eye.outline.forEach((p, i) => {
-        curveVertex(p.x, p.y);
-        if (i === 0) {
-            // Duplicate the initial point (see curveVertex documentation)
-            curveVertex(firstPoint.x, firstPoint.y);
-        }
-        if (i === eye.outline.length - 1) {
-            // Close the curve and duplicate the closing point
-            curveVertex(firstPoint.x, firstPoint.y);
-            curveVertex(firstPoint.x, firstPoint.y);
-        }
-    });
-    endShape();
-}
-
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    background(0);
+    background(255);
 }
 
 //Events we are listening for
@@ -184,6 +186,7 @@ socket.on("disconnect", () => {
 
 // Callback function to recieve message from Node.JS
 socket.on("is_2_looking", (data) => {
-    console.log("window-2-socket looking status:" + data.isLooking);
+    // console.log("window-2-socket looking status:" + data.isLooking);
+    isLookingPrev = isLooking;
     isLooking = data.isLooking;
 });
