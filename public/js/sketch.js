@@ -1,9 +1,6 @@
 // Create connection to Node.JS Server
 const socket = io();
 
-const captureWidrh = 320;
-const captureHeight = 240;
-
 let capture;
 let constraints;
 let tracker;
@@ -61,7 +58,7 @@ function setup() {
     capture = createCapture(constraints);
     // capture = createCapture(VIDEO);
     createCanvas(w, h);
-    capture.size(w, h);
+    // capture.size(w, h);
     capture.hide();
 
     frameRate(10);
@@ -75,17 +72,31 @@ function setup() {
 
 function draw() {
     // Flip the canvas so that we get a mirror image
-    translate(w, 0);
-    scale(-1.0, 1.0);
+    // translate(w, 0);
+    // scale(-1.0, 1.0);
     // Uncomment the line below to see the webcam image (and no trail)
     //image(capture, 0, 0, w, h);
     positions = tracker.getCurrentPosition();
+
+    if (!isLookingPrev && isLooking) {
+        clear();
+
+        if (curWordIndex < words.length - 1) {
+            curWordIndex++;
+        } else {
+            curWordIndex = 0;
+        }
+    }
 
     // console.log(positions)
 
     // console.log("isLookingPrev:" + isLookingPrev)
     // console.log("isLooking:" + isLooking)
-
+    fill(0);
+    textSize(120);
+    textAlign(CENTER, CENTER);
+    // console.log(words[curWordIndex])
+    text(words[curWordIndex], w / 2, h / 2);
 
     if (positions) {
         socket.emit("is_1_looking", {

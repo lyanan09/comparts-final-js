@@ -16,7 +16,7 @@ let isLooking = false; //current looking status
 let isLookingPrev = false; //previous looking status
 
 // chrome
-const webcamId = "6f7155fa1011274bf2743b1c3bb32234b704c32093c79d3b1c14fd150741aeec";
+const webcamId = "48f88de80fffcd5c9052b0ac83927d42e28b791f5ac3d1826ec7b76a7d94721b";
 // const webcamId = "62b99945ee378fc03ebc3d05d4bbaeaa3be9f4cac22c77c20044e57d62416553";
 
 let curWordIndex = 0;
@@ -74,8 +74,8 @@ function setup() {
 
 function draw() {
     // Flip the canvas so that we get a mirror image
-    translate(w, 0);
-    scale(-1.0, 1.0);
+    // translate(w, 0);
+    // scale(-1.0, 1.0);
     // Uncomment the line below to see the webcam image (and no trail)
     //image(capture, 0, 0, w, h);
     positions = tracker.getCurrentPosition();
@@ -84,6 +84,12 @@ function draw() {
 
     // console.log("isLookingPrev:" + isLookingPrev)
     // console.log("isLooking:" + isLooking)
+
+    fill(0);
+    textSize(120);
+    textAlign(CENTER, CENTER);
+    // console.log(words[curWordIndex])
+    text(words[curWordIndex], w / 2, h / 2);
 
     if (positions) {
         socket.emit("is_2_looking", {
