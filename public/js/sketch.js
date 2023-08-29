@@ -15,7 +15,7 @@ let isLookingPrev = false; //previous looking status
 
 let isCurLooking = false;
 let isCurLookingPrev = false;
-let lookingThreshold = 5;
+let lookingThreshold = 3;
 let lookingTimes = 0;
 
 // chrome
@@ -26,6 +26,9 @@ let curWordIndex = 0;
 let wordIndex;
 let wordSize = 120;
 const words = [
+    "You say : 'Ere thrice the sun done salutation to the dawn'",
+    "And you claim these words as your own",
+    "But I've read well, and I've heard them said",
     "A dreaded sunny day",
     "So I meet you at the cemetry gates",
     "Keats and Yeats are on your side",
@@ -39,17 +42,14 @@ const words = [
     "And then they lived",
     "And then they died",
     "It seems so unfair",
-    "I want to cry",
-    "You say : 'Ere thrice the sun done salutation to the dawn'",
-    "And you claim these words as your own",
-    "But I've read well, and I've heard them said",
+    "I want to cry", 
 ]
 
 // const words = [
 //     "00000000000000000000000000000000000000000",
 //     "11111111111111111111111111",
 //     "22222222222222222222222222",
-//     "33333333333333333333333333",
+//     "333333333333333333333333333333333333333333333333333",
 //     "44444444444444444444444444",
 //     "55555555555555555555555555",
 //     "66666666666666666666666666",
@@ -59,6 +59,7 @@ const words = [
 // ]
 
 let letters = [];
+let bgColor = 0;
 
 
 function preload() {
@@ -79,7 +80,7 @@ function setup() {
     colorMode(HSB);
 
     textSize(wordSize);
-    fill(0);
+    
 
     // if (letters.length == 0) {
     updateLetters(words[curWordIndex], wordSize);
@@ -88,7 +89,8 @@ function setup() {
 }
 
 function draw() {
-    background(255);
+    background(bgColor);
+    fill(abs(bgColor - 255));
     // Flip the canvas so that we get a mirror image
     // translate(w, 0);
     // scale(-1.0, 1.0);
@@ -183,17 +185,18 @@ function draw() {
 
 function updateLetters(_word, _wordSize) {
     letters = [];
-    let x = 100;
+    let x = 200;
     let y = h / 2;
     for (let i = 0; i < _word.length; i++) {
         letters[i] = new Letter(x, y, _word.charAt(i));
-        if (x < w - textWidth(_word.charAt(i)) - 100) {
+        if (x < w - textWidth(_word.charAt(i)) - 200) {
             x += textWidth(_word.charAt(i));
         } else {
-            x = 100;
+            x = 200;
             y = h / 2 + _wordSize;
         }
     }
+    bgColor = abs(bgColor - 255);
 }
 
 function drawText() {
@@ -248,7 +251,7 @@ function gotSources(sources) {
     constraints = {
         video: {
             deviceId: {
-                exact: devices[0].deviceId
+                exact: devices[1].deviceId
             },
             width: windowWidth,
             height: windowHeight,
@@ -288,7 +291,7 @@ function drawEye(eye, irisColor) {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    background(255);
+    background(bgColor);
 }
 
 //Events we are listening for
