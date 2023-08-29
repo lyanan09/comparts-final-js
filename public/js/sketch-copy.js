@@ -117,8 +117,12 @@ function draw() {
     if (!isLookingPrev && isLooking && !isCurLooking) {
         if (curWordIndex < words.length - 2 || wordIndex == 0) {
             curWordIndex = wordIndex + 1;
+            bgColor = abs(bgColor - 255);
+
         } else {
             curWordIndex = 0;
+            bgColor = abs(bgColor - 255);
+
         }
         updateLetters(words[curWordIndex], wordSize);
         // drawText();
@@ -193,7 +197,7 @@ function updateLetters(_word, _wordSize) {
             y = h / 2 + _wordSize;
         }
     }
-    bgColor = abs(bgColor - 255);
+    // bgColor = abs(bgColor - 255);
 }
 
 function drawText() {
@@ -215,7 +219,6 @@ function shakeText() {
 function keyPressed({ key }) {
     if (key == 'd') {
         isDebugging = !isDebugging;
-        clear();
     }
     else if (key == ' ')
         noLoop();

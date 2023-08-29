@@ -8,7 +8,7 @@ class Letter {
 
     display() {
         // fill(0);
-        textAlign(CENTER,CENTER);
+        textAlign(CENTER, CENTER);
         text(this.letter, this.x, this.y);
     }
 
