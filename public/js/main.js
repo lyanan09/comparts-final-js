@@ -8,14 +8,14 @@ class Letter {
 
     display() {
         fill(0);
-        textAlign(LEFT);
-        text(letter, x, y);
+        textAlign(CENTER,CENTER);
+        text(this.letter, this.x, this.y);
     }
 
     // Move the letter randomly
     shake() {
-        this.x += random(-4, 4);
-        this.y += random(-4, 4);
+        this.x += random(-40, 40);
+        this.y += random(-40, 40);
     }
 
     // Return the letter home
