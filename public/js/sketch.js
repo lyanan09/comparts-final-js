@@ -25,38 +25,38 @@ let lookingTimes = 0;
 let curWordIndex = 0;
 let wordIndex;
 let wordSize = 120;
-// const words = [
-//     "A dreaded sunny day",
-//     "So I meet you at the cemetry gates",
-//     "Keats and Yeats are on your side",
-//     "While Wilde is on mine",
-//     "So we go inside and we gravely read the stones",
-//     "All those people, all those lives",
-//     "Where are they now?",
-//     "With loves, and hates",
-//     "And passions just like mine",
-//     "They were born",
-//     "And then they lived",
-//     "And then they died",
-//     "It seems so unfair",
-//     "I want to cry",
-//     "You say : 'Ere thrice the sun done salutation to the dawn'",
-//     "And you claim these words as your own",
-//     "But I've read well, and I've heard them said",
-// ]
-
 const words = [
-    "00000000000000000000000000000000000000000",
-    "11111111111111111111111111",
-    "22222222222222222222222222",
-    "33333333333333333333333333",
-    "44444444444444444444444444",
-    "55555555555555555555555555",
-    "66666666666666666666666666",
-    "77777777777777777777777777",
-    "88888888888888888888888888",
-    "99999999999999999999999999"
+    "A dreaded sunny day",
+    "So I meet you at the cemetry gates",
+    "Keats and Yeats are on your side",
+    "While Wilde is on mine",
+    "So we go inside and we gravely read the stones",
+    "All those people, all those lives",
+    "Where are they now?",
+    "With loves, and hates",
+    "And passions just like mine",
+    "They were born",
+    "And then they lived",
+    "And then they died",
+    "It seems so unfair",
+    "I want to cry",
+    "You say : 'Ere thrice the sun done salutation to the dawn'",
+    "And you claim these words as your own",
+    "But I've read well, and I've heard them said",
 ]
+
+// const words = [
+//     "00000000000000000000000000000000000000000",
+//     "11111111111111111111111111",
+//     "22222222222222222222222222",
+//     "33333333333333333333333333",
+//     "44444444444444444444444444",
+//     "55555555555555555555555555",
+//     "66666666666666666666666666",
+//     "77777777777777777777777777",
+//     "88888888888888888888888888",
+//     "99999999999999999999999999"
+// ]
 
 let letters = [];
 
@@ -77,12 +77,12 @@ function setup() {
 
     frameRate(10);
     colorMode(HSB);
-    
+
     textSize(wordSize);
     fill(0);
 
     // if (letters.length == 0) {
-        updateLetters(words[curWordIndex], wordSize);
+    updateLetters(words[curWordIndex], wordSize);
 
     // }
 }
@@ -108,7 +108,7 @@ function draw() {
 
     // console.log("isLookingPrev:" + isLookingPrev + "  isLooking:" + isLooking)
 
-    if (!isLookingPrev && isLooking) {
+    if (!isLookingPrev && isLooking && !isCurLooking) {
         if (curWordIndex < words.length - 2 || wordIndex == 0) {
             curWordIndex = wordIndex + 1;
         } else {
@@ -126,6 +126,9 @@ function draw() {
     // console.log("isLookingPrev:" + isLookingPrev)
     // console.log("isLooking:" + isLooking)
 
+
+    // console.log(lookingTimes + "isCurLooking:" + isCurLooking + "curWordIndex:" + curWordIndex)
+
     isCurLookingPrev = isCurLooking;
     isCurLooking = positions ? true : false;
 
@@ -140,9 +143,6 @@ function draw() {
             });
         }
     }
-    // console.log(lookingTimes + "isCurLooking:" + isCurLooking + "curWordIndex:" + curWordIndex)
-
-
 
 
 
@@ -222,6 +222,9 @@ function keyPressed({ key }) {
     else if (key == 'f') {
         let fs = fullscreen();
         fullscreen(!fs);
+    }
+    else if (key == 'r') {
+        location.reload();
     }
 }
 
