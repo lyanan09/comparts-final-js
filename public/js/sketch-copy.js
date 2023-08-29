@@ -79,10 +79,10 @@ function setup() {
     textSize(wordSize);
     fill(0);
 
-    if (letters.length == 0) {
+    // if (letters.length == 0) {
         updateLetters(words[curWordIndex], wordSize);
 
-    }
+    // }
 
 
 }
@@ -116,7 +116,8 @@ function draw() {
         } else {
             curWordIndex = 0;
         }
-        drawText();
+        updateLetters(words[curWordIndex], wordSize);
+        // drawText();
     }
 
     // if(positions) {
@@ -176,6 +177,7 @@ function draw() {
 }
 
 function updateLetters(_word, _wordSize) {
+    letters = [];
     let x = 100;
     let y = h / 2;
     for (let i = 0; i < _word.length; i++) {
