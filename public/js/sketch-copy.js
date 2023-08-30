@@ -18,31 +18,20 @@ let isCurLookingPrev = false;
 let lookingThreshold = 5;
 let lookingTimes = 0;
 
-// chrome
-// const webcamId = "48f88de80fffcd5c9052b0ac83927d42e28b791f5ac3d1826ec7b76a7d94721b";
-// const webcamId = "62b99945ee378fc03ebc3d05d4bbaeaa3be9f4cac22c77c20044e57d62416553";
-
 let curWordIndex = 0;
 let wordSize = 120;
 const words = [
-    "You say : 'Ere thrice the sun done salutation to the dawn'",
-    "And you claim these words as your own",
-    "But I've read well, and I've heard them said",
-    "A dreaded sunny day",
-    "So I meet you at the cemetry gates",
-    "Keats and Yeats are on your side",
-    "While Wilde is on mine",
-    "So we go inside and we gravely read the stones",
-    "All those people, all those lives",
-    "Where are they now?",
-    "With loves, and hates",
-    "And passions just like mine",
-    "They were born",
-    "And then they lived",
-    "And then they died",
-    "It seems so unfair",
-    "I want to cry",
-
+    "Kindly position yourself anterior to the alabaster demarcation",
+    "Engage in a visual perusal of your surroundings",
+    "As slick as a meticulously waxed simulacrum of the human form",
+    "Endeavor to retain comestible composure, refraining from expelling the phantom morning repast",
+    "Do you not find confections excessively saccharine",
+    "Deposit the aforementioned item into the abyss of the absent dishwasher",
+    "Truly, a paucity of discourse occupies the present juncture",
+    "Pray, when might this confluence of absurdities culminate",
+    "I beseech you to extend your sojourn by a modicum",
+    "Partake in ocular exchanges with haphazard passersby",
+    "All phenomena, without exception, find their denouement"
 ]
 // const words = [
 //     "0000000000000000000000000000000000000000000000000000",
