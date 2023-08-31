@@ -9,7 +9,7 @@ let tracker;
 let positions;
 let w = 0, h = 0;
 
-let isDebugging = true;
+let isDebugging = false;
 let isLooking = false; //current looking status
 let isLookingPrev = false; //previous looking status
 
@@ -21,18 +21,33 @@ let lookingTimes = 0;
 let curWordIndex = 0;
 let wordIndex;
 let wordSize = 120;
+// const words = [
+//     "Kindly position yourself anterior to the alabaster demarcation",
+//     "Engage in a visual perusal of your surroundings",
+//     "As slick as a meticulously waxed simulacrum of the human form",
+//     "Endeavor to retain comestible composure, refraining from expelling the phantom morning repast",
+//     "Do you not find confections excessively saccharine",
+//     "Deposit the aforementioned item into the abyss of the absent dishwasher",
+//     "Truly, a paucity of discourse occupies the present juncture",
+//     "Pray, when might this confluence of absurdities culminate",
+//     "I beseech you to extend your sojourn by a modicum",
+//     "Partake in ocular exchanges with haphazard passersby",
+//     "All phenomena, without exception, find their denouement"
+// ]
+
 const words = [
-    "Kindly position yourself anterior to the alabaster demarcation",
-    "Engage in a visual perusal of your surroundings",
-    "As slick as a meticulously waxed simulacrum of the human form",
-    "Endeavor to retain comestible composure, refraining from expelling the phantom morning repast",
-    "Do you not find confections excessively saccharine",
-    "Deposit the aforementioned item into the abyss of the absent dishwasher",
-    "Truly, a paucity of discourse occupies the present juncture",
-    "Pray, when might this confluence of absurdities culminate",
-    "I beseech you to extend your sojourn by a modicum",
-    "Partake in ocular exchanges with haphazard passersby",
-    "All phenomena, without exception, find their denouement"
+    "Please stand in front of the white line",
+    "Have a look around",
+    "Hunted by pineapples",
+    "Greasy as a waxed mannequin",
+    "Try not to spit out the breakfast you never had",
+    "Don't you think desserts are too sweet",
+    "Put that into the missing dishwasher",
+    "Really have nothing to say",
+    "When can these nonsense be done",
+    "Please stay a bit longer",
+    "Make eye contact with random strangers",
+    "Everything ends",
 ]
 
 // const words = [
@@ -54,6 +69,8 @@ const words = [
 
 let letters = [];
 let bgColor = 0;
+let x = 200;
+let y = 0;
 
 
 function preload() {
@@ -67,7 +84,7 @@ function preload() {
 function setup() {
     w = windowWidth;
     h = windowHeight;
-
+    y = h / 2
 
 
     frameRate(10);
@@ -182,16 +199,16 @@ function draw() {
 }
 
 function updateLetters(_word, _wordSize) {
+    y = h / 2
+    x = 200;
     letters = [];
-    let x = 200;
-    let y = h / 2;
     for (let i = 0; i < _word.length; i++) {
         letters[i] = new Letter(x, y, _word.charAt(i));
         if (x < w - textWidth(_word.charAt(i)) - 200) {
             x += textWidth(_word.charAt(i));
         } else {
             x = 200;
-            y = h / 2 + _wordSize;
+            y = y + _wordSize;
         }
     }
     // bgColor = abs(bgColor - 255);
@@ -248,7 +265,7 @@ function gotSources(sources) {
     constraints = {
         video: {
             deviceId: {
-                exact: devices[1].deviceId
+                exact: devices[0].deviceId
             },
             width: windowWidth,
             height: windowHeight,
