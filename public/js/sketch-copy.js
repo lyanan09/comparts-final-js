@@ -1,38 +1,33 @@
 // Create connection to Node.JS Server
 const socket = io();
 
-let devices = [];
+let devices = []; // for 2 webcams
 
 let capture;
-let constraints;
-let tracker;
-let positions;
-let w = 0, h = 0;
+let constraints; // capturen constraints
+let tracker; // traker for face detection
+let positions; // data of the face
+let w = 0, h = 0; // canvas width and height
 
-let isDebugging = false;
-let isLooking = false; //current looking status
-let isLookingPrev = false; //previous looking status
+let isDebugging = false; // debugging mode
 
-let isCurLooking = false;
-let isCurLookingPrev = false;
+let isLooking = false; // current another page looking status
+let isLookingPrev = false; // previous another page looking status
+let isCurLooking = false; // current this page looking status
+let isCurLookingPrev = false; // previous this page looking status
+
 let lookingThreshold = 5;
-let lookingTimes = 0;
+let lookingTimes = 0; // the number of face detection from another page
 
-let curWordIndex = 0;
+let curWordIndex = 0; // word index of this page
+let wordIndex; // word index of another page
 let wordSize = 120;
-// const words = [
-//     "Kindly position yourself anterior to the alabaster demarcation",
-//     "Engage in a visual perusal of your surroundings",
-//     "As slick as a meticulously waxed simulacrum of the human form",
-//     "Endeavor to retain comestible composure, refraining from expelling the phantom morning repast",
-//     "Do you not find confections excessively saccharine",
-//     "Deposit the aforementioned item into the abyss of the absent dishwasher",
-//     "Truly, a paucity of discourse occupies the present juncture",
-//     "Pray, when might this confluence of absurdities culminate",
-//     "I beseech you to extend your sojourn by a modicum",
-//     "Partake in ocular exchanges with haphazard passersby",
-//     "All phenomena, without exception, find their denouement"
-// ]
+
+let letters = []; // letters array for one word
+let bgColor = 0; // background color of the whole page
+let x = 200; // the positon x to draw the letters
+let y = 0;  // the positon x to draw the letters
+
 const words = [
     "Please stand in front of the white line",
     "Have a look around",
@@ -61,13 +56,6 @@ const words = [
 //     "99999999999999999999999999"
 // ]
 
-let letters = [];
-
-let bgColor = 255;
-let x = 200;
-let y = 0;
-
-
 function preload() {
     navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
         //once permission has been allowed then we can select which device to use
@@ -79,47 +67,32 @@ function preload() {
 function setup() {
     w = windowWidth;
     h = windowHeight;
-    y = h / 2
+    y = h / 2;
 
     frameRate(10);
     colorMode(HSB);
 
-
     textSize(wordSize);
-    // fill(0);
-
-    // if (letters.length == 0) {
     updateLetters(words[curWordIndex], wordSize);
-
-    // }
-
-
 }
 
 function draw() {
     background(bgColor);
     fill(abs(bgColor - 255));
-    // fill(255);
-    // Flip the canvas so that we get a mirror image
-    // translate(w, 0);
-    // scale(-1.0, 1.0);
-    // Uncomment the line below to see the webcam image (and no trail)
-    //image(capture, 0, 0, w, h);
+
+    // when getting data from face detection
     if (tracker) {
         positions = tracker.getCurrentPosition();
     }
 
-    // console.log(positions)
-
-    // console.log("isLookingPrev:" + isLookingPrev)
-    // console.log("isLooking:" + isLooking)
-
     if (isLooking && isCurLooking) {
+        // when both screen is being watched
         shakeText();
     } else {
         drawText();
     }
 
+    // when the other screen is being watched, change the word
     if (!isLookingPrev && isLooking && !isCurLooking) {
         if (curWordIndex < words.length - 2 || wordIndex == 0) {
             curWordIndex = wordIndex + 1;
@@ -131,18 +104,21 @@ function draw() {
 
         }
         updateLetters(words[curWordIndex], wordSize);
-        // drawText();
     }
 
     // if(positions) {
     isCurLookingPrev = isCurLooking;
     isCurLooking = positions ? true : false;
 
+    // becasue the "positions" is not stable 
+    // for example: can't detect face when there are people looking at the screen at some moment
+    // set a lookingThreshold to make sure that only when face being detected more than this number continously, means there are people looking at the screen
     if (isCurLookingPrev != isCurLooking) {
         lookingTimes = 0;
     } else {
         lookingTimes++;
         if (lookingTimes >= lookingThreshold) {
+            //send to sever when this screen is being watched
             socket.emit("is_2_looking", {
                 isLooking: isCurLooking,
                 wordIndex: curWordIndex
@@ -150,27 +126,11 @@ function draw() {
         }
     }
 
-    // console.log(lookingTimes + "isCurLooking:" + isCurLooking + "curWordIndex:" + curWordIndex)
-
-    // }
-
-    // if (positions) {
-    //     socket.emit("is_2_looking", {
-    //         isLooking: true
-    //     });
-    // } else {
-    //     socket.emit("is_2_looking", {
-    //         isLooking: false
-    //     });
-    // }
-
-
-
     // for debuging
     if (positions && isDebugging) {
 
-        // Eye points from clmtrackr:
-        // https://www.auduno.com/clmtrackr/docs/reference.html
+        // Draw eyes:
+        // https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
         const eye1 = {
             outline: [23, 63, 24, 64, 25, 65, 26, 66].map(getPoint),
             center: getPoint(27),
@@ -190,11 +150,12 @@ function draw() {
     }
 }
 
+// function for changing the word
 function updateLetters(_word, _wordSize) {
-    y = h / 2
+    y = h / 2;
     x = 200;
     letters = [];
-    
+
     for (let i = 0; i < _word.length; i++) {
         letters[i] = new Letter(x, y, _word.charAt(i));
         if (x < w - textWidth(_word.charAt(i)) - 200) {
@@ -204,9 +165,9 @@ function updateLetters(_word, _wordSize) {
             y = y + _wordSize;
         }
     }
-    // bgColor = abs(bgColor - 255);
 }
 
+// function for showing the words
 function drawText() {
     for (let i = 0; i < letters.length; i++) {
         letters[i].display();
@@ -214,6 +175,7 @@ function drawText() {
     }
 }
 
+// function for shaking the words
 function shakeText() {
     for (let i = 0; i < letters.length; i++) {
         letters[i].display();
@@ -221,28 +183,31 @@ function shakeText() {
     }
 }
 
-// When a key is pressed, capture the background image into the backgroundPixels
-// buffer, by copying each of the current frame's pixels into it.
 function keyPressed({ key }) {
     if (key == 'd') {
+        // toggle debug mode
         isDebugging = !isDebugging;
     }
-    else if (key == ' ')
+    else if (key == ' '){
+        // stop looping
         noLoop();
+    }
     else if (key == 'f') {
+        // toggle fullscreen
         let fs = fullscreen();
         fullscreen(!fs);
     }
     else if (key == 'r') {
+        // refresh page
         location.reload();
     }
 }
 
-// This method can be removed after the source ID has been determined.
+// callback function when webcam being found
 function gotSources(sources) {
 
     for (var i = 0; i !== sources.length; ++i) {
-        //for reeal
+        //for real
 
         if (sources[i].kind === 'video' || sources[i].kind === 'videoinput' && sources[i].label.includes("USB")) {
             console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
@@ -267,6 +232,7 @@ function gotSources(sources) {
         }
     };
 
+    // setup capture and traker after webcam being found
     capture = createCapture(constraints);
     createCanvas(w, h);
     capture.size(w, h);
@@ -277,14 +243,17 @@ function gotSources(sources) {
     tracker.start(capture.elt);
 }
 
+// Draw eyes:
+// https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
 function getPoint(index) {
     return createVector(positions[index][0], positions[index][1]);
 }
 
+// Draw eyes:
+// https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
 function drawEye(eye, irisColor) {
     noFill();
     stroke(255, 0.4);
-    // drawEyeOutline(eye);
 
     const irisRadius = min(eye.center.dist(eye.top), eye.center.dist(eye.bottom));
     const irisSize = irisRadius * 2;
@@ -316,7 +285,6 @@ socket.on("disconnect", () => {
 
 // Callback function to recieve message from Node.JS
 socket.on("is_1_looking", (data) => {
-    // console.log("window-1-socket looking status:" + data.isLooking);
     isLookingPrev = isLooking;
     isLooking = data.isLooking;
     wordIndex = data.wordIndex;

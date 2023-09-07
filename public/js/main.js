@@ -1,3 +1,4 @@
+// class Letter for each word
 class Letter {
 
     constructor(x_, y_, letter_) {
@@ -7,7 +8,6 @@ class Letter {
     }
 
     display() {
-        // fill(0);
         textAlign(CENTER, CENTER);
         text(this.letter, this.x, this.y);
     }
