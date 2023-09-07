@@ -2,9 +2,7 @@
 
 MA Computational Arts final project
 
-run npm install
-
-run npm start
+A space trying to disrupt traditional ways of reading and challenge audience expectations, exploring how people's communication of information is affected through visual dislocation, choice of text and social interaction.
 
 ## Words
 
@@ -31,3 +29,10 @@ run npm start
 > Make eye contact with random strangers
 > 
 > Everything ends
+
+
+## Run this
+
+run npm install
+
+run npm start
