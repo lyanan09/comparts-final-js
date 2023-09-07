@@ -2,6 +2,10 @@
 
 MA Computational Arts final project
 
+run npm install
+
+run npm start
+
 ## Words
 
 > Please stand in front of the white line
