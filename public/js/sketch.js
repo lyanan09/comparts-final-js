@@ -132,6 +132,7 @@ function draw() {
     if (positions && isDebugging) {
 
         // Draw eyes:
+        // Eye trails(random color) by kerryrodden
         // https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
         const eye1 = {
             outline: [23, 63, 24, 64, 25, 65, 26, 66].map(getPoint),
@@ -243,12 +244,14 @@ function gotSources(sources) {
 }
 
 // Draw eyes:
+// Eye trails(random color) by kerryrodden
 // https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
 function getPoint(index) {
     return createVector(positions[index][0], positions[index][1]);
 }
 
 // Draw eyes:
+// Eye trails(random color) by kerryrodden
 // https://editor.p5js.org/kerryrodden/sketches/-KkpbDv6Z
 function drawEye(eye, irisColor) {
     noFill();
