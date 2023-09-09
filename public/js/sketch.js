@@ -9,7 +9,7 @@ let tracker; // traker for face detection
 let positions; // data of the face
 let w = 0, h = 0; // canvas width and height
 
-let isDebugging = false; // debugging mode
+let isDebugging = true; // debugging mode
 
 let isLooking = false; // current another page looking status
 let isLookingPrev = false; // previous another page looking status
@@ -82,6 +82,18 @@ function draw() {
     background(bgColor);
     fill(abs(bgColor - 255));
 
+    // instructions for debugging
+    if(isDebugging) {
+        push();
+        textSize(12);
+        textAlign(LEFT);
+        text("press d for toggle debug mode", 10, 20);
+        text("press space for stop looping", 10, 40);
+        text("press f for toggle fullscreen mode", 10, 60);
+        text("press r for refresh the whole page", 10, 80);
+        pop();
+    }
+
     // when getting data from face detection
     if (tracker) {
         positions = tracker.getCurrentPosition();
@@ -110,6 +122,8 @@ function draw() {
 
     isCurLookingPrev = isCurLooking;
     isCurLooking = positions ? true : false;
+
+    console.log("isCurLooking:" + isCurLooking)
 
     // becasue the "positions" is not stable 
     // for example: can't detect face when there are people looking at the screen at some moment
@@ -209,17 +223,20 @@ function keyPressed({ key }) {
 // callback function when webcam being found
 function gotSources(sources) {
     for (var i = 0; i !== sources.length; ++i) {
-        //for real
-        if (sources[i].kind === 'video' || sources[i].kind === 'videoinput' && sources[i].label.includes("USB")) {
-            console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
-            devices.push(sources[i]);
-        }
 
-        //for testing
-        // if (sources[i].kind === 'video' || sources[i].kind === 'videoinput') {
-        //     console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
-        //     devices.push(sources[i]);
-        // }
+        if(isDebugging) {
+            //for testing
+            if (sources[i].kind === 'video' || sources[i].kind === 'videoinput') {
+                console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
+                devices.push(sources[i]);
+            }
+        } else {
+            //for real
+            if (sources[i].kind === 'video' || sources[i].kind === 'videoinput' && sources[i].label.includes("USB")) {
+                console.log('video: ' + sources[i].label + ' ID: ' + sources[i].deviceId);
+                devices.push(sources[i]);
+            }
+        }
     }
 
     constraints = {

@@ -33,6 +33,6 @@ A space trying to disrupt traditional ways of reading and challenge audience exp
 
 ## Run this
 
-run npm install
+npm install
 
-run npm start
+npm start
