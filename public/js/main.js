@@ -1,3 +1,5 @@
+// Shaking text (3rd sketch) by Hunter Austin Hare 
+// https://openprocessing.org/sketch/85958
 // class Letter for each word
 class Letter {
 
